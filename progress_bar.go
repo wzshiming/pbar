@@ -26,9 +26,13 @@ type BaseProgressBar struct {
 	Buf            bytes.Buffer
 }
 
+func (p *BaseProgressBar) Count() int {
+	return 1
+}
+
 func (p *BaseProgressBar) Format() string {
 	if p.Info.Total == 0 {
-		return ""
+		p.Info.Total = 1
 	}
 	p.Info.calculate()
 	p.calculateMark()

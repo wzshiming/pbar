@@ -4,6 +4,20 @@ import (
 	"time"
 )
 
+type Mark interface {
+	MarkFormat(info *Info) string
+}
+
+type Bar interface {
+	BarFormat(info *Info, offset, length, total int) string
+}
+
+type ProgressBar interface {
+	Format() string
+	IsComplete() bool
+	Count() int
+}
+
 type Info struct {
 	Total     uint64
 	Current   uint64
@@ -34,17 +48,4 @@ func (i *Info) calculate() {
 	if i.StartTime.IsZero() {
 		i.StartTime = time.Now()
 	}
-}
-
-type Mark interface {
-	MarkFormat(info *Info) string
-}
-
-type Bar interface {
-	BarFormat(info *Info, offset, length, total int) string
-}
-
-type ProgressBar interface {
-	Format() string
-	IsComplete() bool
 }

@@ -8,6 +8,14 @@ import (
 
 type ProgressBarGroup []ProgressBar
 
+func (p ProgressBarGroup) Count() int {
+	sum := 0
+	for _, v := range p {
+		sum += v.Count()
+	}
+	return sum
+}
+
 func (p ProgressBarGroup) IsComplete() bool {
 	for _, v := range p {
 		if !v.IsComplete() {
@@ -18,16 +26,17 @@ func (p ProgressBarGroup) IsComplete() bool {
 }
 
 func (p ProgressBarGroup) Format() string {
-	ss := []string{}
-	for _, v := range p {
-		ss = append(ss, v.Format())
+	switch len(p) {
+	case 0:
+		return ""
+	case 1:
+		return p[0].Format()
+	default:
+		ss := []string{}
+		ss = append(ss, cursor.RawMoveUp(uint64(len(p))))
+		for _, v := range p {
+			ss = append(ss, v.Format())
+		}
+		return strings.Join(ss, "\n")
 	}
-	if len(ss) > 1 {
-		ss = append(ss, cursor.RawMoveUp(uint64(len(ss))))
-	}
-	return strings.Join(ss, "\n")
-}
-
-func (p ProgressBarGroup) End() string {
-	return cursor.RawMoveDown(uint64(len(p)))
 }

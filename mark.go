@@ -9,7 +9,7 @@ import (
 type MarkRatio struct{}
 
 func (b MarkRatio) MarkFormat(info *Info) string {
-	return fmt.Sprintf("%.1f/%.1f", float64(info.Current), float64(info.Total))
+	return fmt.Sprintf("%d/%d", info.Current, info.Total)
 }
 
 type MarkPercent struct{}
