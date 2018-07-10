@@ -18,7 +18,7 @@ func NewNormalStyle(content string) ProgressBar {
 					Text: content,
 				},
 				&BarMark{
-					Width: 100 - len(content),
+					Width: 80,
 					PaddingBarForm: &BaseBar{
 						Filler: `=`,
 					},
@@ -112,7 +112,7 @@ func NewFillStyle(content string) ProgressBar {
 					Text: ctc.Negative.String(),
 				},
 				&BarMark{
-					Width:          120,
+					Width:          100,
 					PaddingBarForm: bb,
 					MidMarkForm: &MarkText{
 						Text: ctc.Reset.String(),
@@ -135,7 +135,7 @@ func NewBreakStyle(content string) ProgressBar {
 					Text: content,
 				},
 				&BarMark{
-					Width: 100 - len(content),
+					Width: 80,
 					PaddingBarForm: &BaseBar{
 						Filler: `>`,
 					},
