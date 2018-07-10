@@ -4,10 +4,6 @@ import (
 	"github.com/wzshiming/ctc"
 )
 
-func NewBaseProgressBar(content string) ProgressBar {
-	return NewNormalStyle(content)
-}
-
 func NewNormalStyle(content string) ProgressBar {
 	p := &BaseProgressBar{
 		Marks: Marks{

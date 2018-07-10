@@ -28,7 +28,7 @@ func (r *Renderer) Clear() {
 }
 
 func (r *Renderer) New(name string) *BaseInfo {
-	pb := NewBaseProgressBar(name)
+	pb := NewNormalStyle(name)
 	return r.Add(pb)
 }
 
