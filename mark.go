@@ -6,44 +6,70 @@ import (
 	"time"
 )
 
+type Marks struct {
+	Split string
+	Slice []Mark
+}
+
+func (m *Marks) MarkFormat(info *BaseInfo) string {
+	ss := []string{}
+	for _, v := range m.Slice {
+		ss = append(ss, v.MarkFormat(info))
+	}
+	return strings.Join(ss, m.Split)
+}
+
 type MarkRatio struct{}
 
-func (b MarkRatio) MarkFormat(info *Info) string {
+func (b *MarkRatio) MarkFormat(info *BaseInfo) string {
 	return fmt.Sprintf("%d/%d", info.Current, info.Total)
 }
 
 type MarkPercent struct{}
 
-func (b MarkPercent) MarkFormat(info *Info) string {
-	return fmt.Sprintf("%5.2f%%", 100*float64(info.Current)/float64(info.Total))
+func (b *MarkPercent) MarkFormat(info *BaseInfo) string {
+	return fmt.Sprintf("%6.2f%%", 100*float64(info.Current)/float64(info.Total))
 }
 
-type MarkRoll string
-
-func (b MarkRoll) MarkFormat(info *Info) string {
-	text := string(b)
-	i := info.Refresh % len(text)
-	return text[i : i+1]
+type MarkRoll struct {
+	Over string
+	Roll []string
 }
 
-type MarkText string
-
-func (b MarkText) MarkFormat(info *Info) string {
-	return string(b)
-}
-
-type MarkAfter struct{}
-
-func (b MarkAfter) MarkFormat(info *Info) string {
-	return time.Now().Sub(info.StartTime).Truncate(time.Second).String()
-}
-
-type MarkMerge []Mark
-
-func (b MarkMerge) MarkFormat(info *Info) string {
-	ss := []string{}
-	for _, v := range b {
-		ss = append(ss, v.MarkFormat(info))
+func (b *MarkRoll) MarkFormat(info *BaseInfo) string {
+	if info.IsComplete() {
+		return b.Over
 	}
-	return strings.Join(ss, " ")
+	i := info.Refresh % len(b.Roll)
+	return b.Roll[i]
+}
+
+type MarkText struct {
+	Text string
+	Max  int
+}
+
+func (b *MarkText) MarkFormat(info *BaseInfo) string {
+	text := b.Text
+	if b.Max > 0 && len(text) > b.Max {
+		text = text[:b.Max] + "..."
+	}
+	return text
+}
+
+type MarkAfter struct {
+	endAt time.Time
+}
+
+func (b *MarkAfter) MarkFormat(info *BaseInfo) string {
+	if info.StartTime.IsZero() {
+		info.StartTime = time.Now()
+	}
+	if info.IsComplete() {
+		if b.endAt.IsZero() {
+			b.endAt = time.Now()
+		}
+		return b.endAt.Sub(info.StartTime).Truncate(time.Second).String()
+	}
+	return time.Now().Sub(info.StartTime).Truncate(time.Second).String()
 }

@@ -1,97 +1,55 @@
 package pbar
 
 import (
-	"bytes"
-	"text/template"
+	"strings"
+
+	"github.com/wzshiming/cursor"
 )
 
-type BaseProgressBarData struct {
-	Padding string
-	Pending string
-	Head    string
-	Mid     string
-	Tail    string
-}
-
 type BaseProgressBar struct {
-	Data BaseProgressBarData
-	Info
-	Width          int
-	Template       *template.Template
-	PaddingBarForm Bar
-	PendingBarForm Bar
-	HeadMarkForm   Mark
-	MidMarkForm    Mark
-	TailMarkForm   Mark
-	Buf            bytes.Buffer
+	BaseInfo
+	Marks
 }
 
-func (p *BaseProgressBar) Count() int {
+func (b *BaseProgressBar) Format() string {
+	return "\r" + b.MarkFormat(&b.BaseInfo)
+}
+
+func (b *BaseProgressBar) Count() int {
 	return 1
 }
 
-func (p *BaseProgressBar) Format() string {
-	if p.Info.Total == 0 {
-		p.Info.Total = 1
+type ProgressBarGroup []ProgressBar
+
+func (p ProgressBarGroup) Count() int {
+	sum := 0
+	for _, v := range p {
+		sum += v.Count()
 	}
-	p.Info.calculate()
-	p.calculateMark()
-	p.calculateBar()
-	p.Buf.Reset()
-	p.Template.Execute(&p.Buf, p.Data)
-	return p.Buf.String()
+	return sum
 }
 
-func (p *BaseProgressBar) MarkFormat(info *Info) string {
-	p.Info = *info
-	return p.Format()
-}
-
-func (p *BaseProgressBar) calculateMark() {
-
-	if p.HeadMarkForm != nil {
-		p.Data.Head = p.HeadMarkForm.MarkFormat(&p.Info)
-	}
-
-	if p.MidMarkForm != nil {
-		if p.Info.Current != p.Info.Total {
-			p.Data.Mid = p.MidMarkForm.MarkFormat(&p.Info)
-		} else {
-			p.Data.Mid = ""
+func (p ProgressBarGroup) IsComplete() bool {
+	for _, v := range p {
+		if !v.IsComplete() {
+			return false
 		}
 	}
-
-	if p.TailMarkForm != nil {
-		p.Data.Tail = p.TailMarkForm.MarkFormat(&p.Info)
-	}
-
+	return true
 }
-func (p *BaseProgressBar) calculateBar() {
 
-	cur := int(p.Info.Current)
-	tol := int(p.Info.Total)
-
-	if p.Width > 0 {
-		width := p.Width
-		width -= len(p.Data.Head)
-		width -= len(p.Data.Tail)
-		width -= len(p.Data.Mid)
-
-		cur *= width
-		cur /= tol
-		tol = width
+func (p ProgressBarGroup) Format() string {
+	switch len(p) {
+	case 0:
+		return ""
+	case 1:
+		return p[0].Format()
+	default:
+		ss := []string{}
+		ss = append(ss, cursor.RawMoveUp(uint64(len(p))))
+		for _, v := range p {
+			ss = append(ss, v.Format())
+		}
+		return strings.Join(ss, "\n")
 	}
-
-	sub := tol - cur
-
-	if p.PaddingBarForm != nil {
-		p.Data.Padding = p.PaddingBarForm.BarFormat(&p.Info, 0, cur, tol)
-	}
-
-	if p.PendingBarForm != nil {
-		p.Data.Pending = p.PendingBarForm.BarFormat(&p.Info, cur, sub, tol)
-	}
-
-	p.Info.Refresh++
-	return
 }
