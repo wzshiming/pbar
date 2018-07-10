@@ -28,7 +28,11 @@ func (b *MarkRatio) MarkFormat(info *BaseInfo) string {
 type MarkPercent struct{}
 
 func (b *MarkPercent) MarkFormat(info *BaseInfo) string {
-	return fmt.Sprintf("%6.2f%%", 100*float64(info.Current)/float64(info.Total))
+	per := 0.0
+	if info.Total != 0 {
+		per = 100 * float64(info.Current) / float64(info.Total)
+	}
+	return fmt.Sprintf("%6.2f%%", per)
 }
 
 type MarkRoll struct {
