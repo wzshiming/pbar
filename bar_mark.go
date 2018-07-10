@@ -19,11 +19,16 @@ func (p *BarMark) MarkFormat(info *BaseInfo) string {
 		cur = tol
 	}
 
-	if p.Width > 0 && cur != 0 {
+	if p.Width > 0 {
 		width := p.Width
-		cur *= width
-		cur /= tol
-		tol = width
+		if tol != 0 {
+			cur *= width
+			cur /= tol
+			tol = width
+		} else {
+			tol = width
+			cur = 0
+		}
 	}
 
 	mid := ""
