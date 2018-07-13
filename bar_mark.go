@@ -4,6 +4,7 @@ import (
 	"strings"
 )
 
+// BarMark basic implementation progress bar mark
 type BarMark struct {
 	Width          int
 	PaddingBarForm Bar
@@ -11,7 +12,7 @@ type BarMark struct {
 	PendingBarForm Bar
 }
 
-func (p *BarMark) MarkFormat(info *BaseInfo) string {
+func (p *BarMark) MarkFormat(info *Info) string {
 
 	cur := int(info.Current)
 	tol := int(info.Total)

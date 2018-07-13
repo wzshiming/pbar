@@ -4,60 +4,30 @@ import (
 	"time"
 )
 
-type Mark interface {
-	MarkFormat(info *BaseInfo) string
-}
-
-type Bar interface {
-	BarFormat(info *BaseInfo, offset, length, total int) string
-}
-
-type ProgressBar interface {
-	Format() string
-	IsComplete() bool
-	Count() int
-	Info() Info
-}
-
-type Info interface {
-	IsComplete() bool
-	SetTotal(total uint64)
-	SetCurrent(current uint64)
-	AddCurrent(val uint64)
-}
-
-type BaseInfo struct {
+// Info Current information about the progress bar
+type Info struct {
 	Total     uint64
 	Current   uint64
 	Refresh   int
 	StartTime time.Time
 }
 
-func (i *BaseInfo) Info() Info {
+func (i *Info) Info() *Info {
 	return i
 }
 
-func (i *BaseInfo) IsComplete() bool {
+func (i *Info) IsComplete() bool {
 	return i.Total != 0 && i.Current >= i.Total
 }
 
-func (i *BaseInfo) SetTotal(total uint64) {
+func (i *Info) SetTotal(total uint64) {
 	i.Total = total
 }
 
-func (i *BaseInfo) SetCurrent(current uint64) {
+func (i *Info) SetCurrent(current uint64) {
 	i.Current = current
 }
 
-func (i *BaseInfo) AddCurrent(val uint64) {
+func (i *Info) AddCurrent(val uint64) {
 	i.Current += val
-}
-
-func (i *BaseInfo) calculate() {
-	if i.Current >= i.Total {
-		i.Current = i.Total
-	}
-	if i.StartTime.IsZero() {
-		i.StartTime = time.Now()
-	}
 }

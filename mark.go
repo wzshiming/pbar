@@ -6,12 +6,18 @@ import (
 	"time"
 )
 
+// Mark Marking progress can be any text that represents progress
+type Mark interface {
+	MarkFormat(info *Info) string
+}
+
+// Marks is a combination of multiple Marks
 type Marks struct {
 	Split string
 	Slice []Mark
 }
 
-func (m *Marks) MarkFormat(info *BaseInfo) string {
+func (m *Marks) MarkFormat(info *Info) string {
 	ss := []string{}
 	for _, v := range m.Slice {
 		ss = append(ss, v.MarkFormat(info))
@@ -19,15 +25,17 @@ func (m *Marks) MarkFormat(info *BaseInfo) string {
 	return strings.Join(ss, m.Split)
 }
 
+// MarkRatio Show progress in a ratio
 type MarkRatio struct{}
 
-func (b *MarkRatio) MarkFormat(info *BaseInfo) string {
+func (b *MarkRatio) MarkFormat(info *Info) string {
 	return fmt.Sprintf("%d/%d", info.Current, info.Total)
 }
 
+// MarkRatio Show progress in a percent
 type MarkPercent struct{}
 
-func (b *MarkPercent) MarkFormat(info *BaseInfo) string {
+func (b *MarkPercent) MarkFormat(info *Info) string {
 	per := 0.0
 	if info.Total != 0 {
 		per = 100 * float64(info.Current) / float64(info.Total)
@@ -35,12 +43,13 @@ func (b *MarkPercent) MarkFormat(info *BaseInfo) string {
 	return fmt.Sprintf("%6.2f%%", per)
 }
 
+// MarkRoll Indicates that no response has been lost
 type MarkRoll struct {
 	Over string
 	Roll []string
 }
 
-func (b *MarkRoll) MarkFormat(info *BaseInfo) string {
+func (b *MarkRoll) MarkFormat(info *Info) string {
 	if info.IsComplete() {
 		return b.Over
 	}
@@ -48,6 +57,7 @@ func (b *MarkRoll) MarkFormat(info *BaseInfo) string {
 	return b.Roll[i]
 }
 
+// MarkText Show text
 type MarkText struct {
 	Text   string
 	Width  int
@@ -55,7 +65,7 @@ type MarkText struct {
 	Filler string
 }
 
-func (b *MarkText) MarkFormat(info *BaseInfo) string {
+func (b *MarkText) MarkFormat(info *Info) string {
 	text := b.Text
 	if b.Width <= 0 {
 		return text
@@ -85,11 +95,12 @@ func (b *MarkText) MarkFormat(info *BaseInfo) string {
 	return text
 }
 
+// MarkAfter Show the after time
 type MarkAfter struct {
 	endAt time.Time
 }
 
-func (b *MarkAfter) MarkFormat(info *BaseInfo) string {
+func (b *MarkAfter) MarkFormat(info *Info) string {
 	if info.StartTime.IsZero() {
 		info.StartTime = time.Now()
 	}

@@ -10,8 +10,9 @@ import (
 	"github.com/wzshiming/task"
 )
 
+// Renderer is render progress bar
 type Renderer struct {
-	pbs     ProgressBarGroup
+	pbs     rendererMark
 	task    *task.Task
 	hz      uint8
 	isStart int
@@ -27,29 +28,32 @@ func NewRenderer() *Renderer {
 	}
 }
 
-// print
+// print output
 func (r *Renderer) print(s string) {
 	r.output.Write(*(*[]byte)(unsafe.Pointer(&s)))
 }
 
 // Clear clear all progress bars
 func (r *Renderer) Clear() {
-	r.print(r.pbs.Format())
+	r.print(r.pbs.String())
 	r.print("\n")
 	r.task.CancelAll()
 	r.pbs = r.pbs[:0]
 }
 
-// Add adds a new default progress bar
-func (r *Renderer) New(name string) Info {
+// New adds a new default progress bar
+func (r *Renderer) New(name string) *Info {
 	pb := NewNormalStyle(name)
 	return r.Add(pb)
 }
 
 // Add adds a new progress bar
-func (r *Renderer) Add(pb ProgressBar) Info {
-	r.pbs = append(r.pbs, pb)
-	return pb.Info()
+func (r *Renderer) Add(pb Mark) *Info {
+	n := &infoMark{
+		Mark: pb,
+	}
+	r.pbs = append(r.pbs, n)
+	return &n.Info
 }
 
 // SetHZ sets refresh frequency HZ
@@ -64,10 +68,10 @@ func (r *Renderer) Start() {
 	}
 	r.isStart = 1
 	r.print(strings.Repeat("\n", r.pbs.Count()-1))
-	r.print(r.pbs.Format())
+	r.print(r.pbs.String())
 	var node *task.Node
 	node = task.AddPeriodic(task.PeriodicInterval(0, time.Second/time.Duration(r.hz)), func() {
-		r.print(r.pbs.Format())
+		r.print(r.pbs.String())
 		if r.pbs.IsComplete() {
 			r.print("\n")
 			task.Cancel(node)
