@@ -16,7 +16,14 @@ type ProgressBar interface {
 	Format() string
 	IsComplete() bool
 	Count() int
-	Info() *BaseInfo
+	Info() Info
+}
+
+type Info interface {
+	IsComplete() bool
+	SetTotal(total uint64)
+	SetCurrent(current uint64)
+	AddCurrent(val uint64)
 }
 
 type BaseInfo struct {
@@ -26,7 +33,7 @@ type BaseInfo struct {
 	StartTime time.Time
 }
 
-func (i *BaseInfo) Info() *BaseInfo {
+func (i *BaseInfo) Info() Info {
 	return i
 }
 
