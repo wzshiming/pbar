@@ -22,7 +22,6 @@ func main() {
 	info5.SetTotal(100)
 	info6 := renderer.Add(pbar.NewTTYShowStyle("Hello world! hello all! biu biu biu!"))
 	info6.SetTotal(100)
-	renderer.Start()
 	go func() {
 		for {
 			time.Sleep(time.Second / 5)

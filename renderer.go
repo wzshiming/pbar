@@ -33,11 +33,13 @@ func (r *Renderer) print(s string) {
 	r.output.Write(*(*[]byte)(unsafe.Pointer(&s)))
 }
 
+// Print
+func (r *Renderer) Print() {
+	r.print(r.pbs.String())
+}
+
 // Clear clear all progress bars
 func (r *Renderer) Clear() {
-	r.print(r.pbs.String())
-	r.print("\n")
-	r.task.CancelAll()
 	r.pbs = r.pbs[:0]
 	r.isStart = 0
 }
@@ -54,6 +56,11 @@ func (r *Renderer) Add(pb Mark) *Info {
 		Mark: pb,
 	}
 	r.pbs = append(r.pbs, n)
+
+	if r.isStart == 0 && r.task.Len() == 0 {
+		r.isStart = 1
+		r.task.Add(time.Now(), r.start)
+	}
 	return &n.Info
 }
 
@@ -62,23 +69,14 @@ func (r *Renderer) SetHZ(hz uint8) {
 	r.hz = hz
 }
 
-// Start rendering until complete
-func (r *Renderer) Start() {
-	if r.isStart != 0 {
-		return
+// start rendering until complete
+func (r *Renderer) start() {
+	count := r.pbs.Count()
+	if count > 1 {
+		r.print(strings.Repeat("\n", count-1))
 	}
-	r.isStart = 1
-	r.print(strings.Repeat("\n", r.pbs.Count()-1))
-	r.print(r.pbs.String())
-	var node *task.Node
-	node = task.AddPeriodic(task.PeriodicInterval(0, time.Second/time.Duration(r.hz)), func() {
-		r.print(r.pbs.String())
-		if r.pbs.IsComplete() {
-			r.print("\n")
-			task.Cancel(node)
-			r.isStart = 0
-		}
-	})
+	r.Print()
+	task.AddPeriodic(task.PeriodicInterval(0, time.Second/time.Duration(r.hz)), r.Print)
 }
 
 // Wait until complete
@@ -86,5 +84,8 @@ func (r *Renderer) Wait() {
 	for !r.pbs.IsComplete() {
 		r.task.Join()
 	}
+	r.task.CancelAll()
+	r.Print()
+	r.print("\n")
 	r.Clear()
 }
