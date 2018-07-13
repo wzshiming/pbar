@@ -1,9 +1,11 @@
 package pbar
 
 import (
-	"fmt"
+	"io"
+	"os"
 	"strings"
 	"time"
+	"unsafe"
 
 	"github.com/wzshiming/task"
 )
@@ -13,48 +15,68 @@ type Renderer struct {
 	task    *task.Task
 	hz      uint8
 	isStart int
+	output  io.Writer
 }
 
+// NewRenderer creating a new progress bar renderer must have only one working renderer
 func NewRenderer() *Renderer {
 	return &Renderer{
-		task: task.NewTask(1),
-		hz:   6,
+		task:   task.NewTask(1),
+		hz:     6,
+		output: os.Stdout,
 	}
 }
 
+// print
+func (r *Renderer) print(s string) {
+	r.output.Write(*(*[]byte)(unsafe.Pointer(&s)))
+}
+
+// Clear clear all progress bars
 func (r *Renderer) Clear() {
-	fmt.Println(r.pbs.Format())
+	r.print(r.pbs.Format())
+	r.print("\n")
+	r.task.CancelAll()
 	r.pbs = r.pbs[:0]
 }
 
-func (r *Renderer) New(name string) *BaseInfo {
+// Add adds a new default progress bar
+func (r *Renderer) New(name string) Info {
 	pb := NewNormalStyle(name)
 	return r.Add(pb)
 }
 
-func (r *Renderer) Add(pb ProgressBar) *BaseInfo {
+// Add adds a new progress bar
+func (r *Renderer) Add(pb ProgressBar) Info {
 	r.pbs = append(r.pbs, pb)
-	task.Add(time.Now(), r.start)
 	return pb.Info()
 }
 
-func (r *Renderer) start() {
+// SetHZ sets refresh frequency HZ
+func (r *Renderer) SetHZ(hz uint8) {
+	r.hz = hz
+}
+
+// Start rendering until complete
+func (r *Renderer) Start() {
 	if r.isStart != 0 {
 		return
 	}
 	r.isStart = 1
-	fmt.Print(strings.Repeat("\n", r.pbs.Count()-1), r.pbs.Format())
+	r.print(strings.Repeat("\n", r.pbs.Count()-1))
+	r.print(r.pbs.Format())
 	var node *task.Node
 	node = task.AddPeriodic(task.PeriodicInterval(0, time.Second/time.Duration(r.hz)), func() {
-		fmt.Print(r.pbs.Format())
+		r.print(r.pbs.Format())
 		if r.pbs.IsComplete() {
-			fmt.Print("\n")
+			r.print("\n")
 			task.Cancel(node)
 			r.isStart = 0
 		}
 	})
 }
 
+// Wait until complete
 func (r *Renderer) Wait() {
 	for !r.pbs.IsComplete() {
 		r.task.Join()
