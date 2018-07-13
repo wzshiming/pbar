@@ -34,8 +34,6 @@ func (p rendererMark) String() string {
 	switch len(p) {
 	case 0:
 		return ""
-	case 1:
-		return p[0].String()
 	default:
 		ss := []string{}
 		ss = append(ss, cursor.RawMoveUp(uint64(len(p))))

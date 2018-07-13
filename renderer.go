@@ -39,6 +39,7 @@ func (r *Renderer) Clear() {
 	r.print("\n")
 	r.task.CancelAll()
 	r.pbs = r.pbs[:0]
+	r.isStart = 0
 }
 
 // New adds a new default progress bar
