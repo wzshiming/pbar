@@ -49,14 +49,38 @@ func (b *MarkRoll) MarkFormat(info *BaseInfo) string {
 }
 
 type MarkText struct {
-	Text string
-	Max  int
+	Text   string
+	Width  int
+	Roll   int
+	Filler string
 }
 
 func (b *MarkText) MarkFormat(info *BaseInfo) string {
 	text := b.Text
-	if b.Max > 0 && len(text) > b.Max {
-		text = text[:b.Max] + "..."
+	if b.Width <= 0 {
+		return text
+	}
+
+	sub := (len(text) - b.Width)
+	if sub > 0 {
+		if b.Roll > 0 && !info.IsComplete() {
+			index := (info.Refresh / b.Roll) % (2 * sub)
+			if sub > index {
+				text = text[index : index+b.Width]
+			} else {
+				index -= sub
+				text = text[len(text)-index-b.Width : len(text)-index]
+			}
+		} else {
+			text = text[:b.Width-1] + "."
+		}
+	} else if sub < 0 && b.Filler != "" {
+		sub = -sub
+		mask := []rune(b.Filler)
+		if m := sub / len(mask); m > 0 {
+			mask = []rune(strings.Repeat(string(mask), m+1))
+		}
+		text += string(mask[:sub])
 	}
 	return text
 }
