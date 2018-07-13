@@ -10,11 +10,13 @@ func NewNormalStyle(content string) ProgressBar {
 			Split: `|`,
 			Slice: []Mark{
 				&MarkText{
-					Max:  30,
-					Text: content,
+					Filler: ` `,
+					Roll:   5,
+					Width:  20,
+					Text:   content,
 				},
 				&BarMark{
-					Width: 80,
+					Width: 60,
 					PaddingBarForm: &BaseBar{
 						Filler: `=`,
 					},
@@ -35,19 +37,78 @@ func NewNormalStyle(content string) ProgressBar {
 	return p
 }
 
-func NewPercentStyle(content string) ProgressBar {
+func NewTTYShowStyle(content string) ProgressBar {
+	p := &BaseProgressBar{
+		Marks: Marks{
+			Split: `|`,
+			Slice: []Mark{
+				&BarMark{
+					Width: len(content),
+					PaddingBarForm: &BaseBar{
+						Filler: content,
+					},
+					MidMarkForm: &MarkRoll{
+						Over: ` `,
+						Roll: []string{`_`, `_`, ` `, ` `},
+					},
+					PendingBarForm: &BaseBar{
+						Filler: ` `,
+					},
+				},
+				&MarkPercent{},
+				&MarkRatio{},
+				&MarkAfter{},
+			},
+		},
+	}
+	return p
+}
+
+func NewBreakStyle(content string) ProgressBar {
+	p := &BaseProgressBar{
+		Marks: Marks{
+			Split: `|`,
+			Slice: []Mark{
+				&MarkText{
+					Filler: ` `,
+					Roll:   5,
+					Width:  20,
+					Text:   content,
+				},
+				&BarMark{
+					Width: 60,
+					PaddingBarForm: &BaseBar{
+						Filler: `>`,
+					},
+					MidMarkForm: &MarkRoll{
+						Over: `>`,
+						Roll: []string{`\`, `|`, `/`, `|`},
+					},
+					PendingBarForm: &BaseBar{
+						Filler: `|`,
+					},
+				},
+				&MarkPercent{},
+				&MarkRatio{},
+				&MarkAfter{},
+			},
+		},
+	}
+	return p
+}
+
+func NewAddedStyle(content string) ProgressBar {
 	p := &BaseProgressBar{
 		Marks: Marks{
 			Slice: []Mark{
 				&MarkText{
-					Max:  30,
 					Text: content,
 				},
 				&MarkText{
 					Text: ctc.Negative.String(),
 				},
 				&BarMark{
-					Width: 80,
+					Width: 60,
 					PaddingBarForm: &BaseBar{
 						Filler: ` `,
 					},
@@ -81,7 +142,6 @@ func NewFillStyle(content string) ProgressBar {
 	bb := &BaseBar{
 		Filler: ` `,
 		Left: &MarkText{
-			Max:  30,
 			Text: content,
 		},
 		Mid: &Marks{
@@ -108,7 +168,7 @@ func NewFillStyle(content string) ProgressBar {
 					Text: ctc.Negative.String(),
 				},
 				&BarMark{
-					Width:          100,
+					Width:          80,
 					PaddingBarForm: bb,
 					MidMarkForm: &MarkText{
 						Text: ctc.Reset.String(),
@@ -121,31 +181,40 @@ func NewFillStyle(content string) ProgressBar {
 	return p
 }
 
-func NewBreakStyle(content string) ProgressBar {
+func NewFillRedStyle(content string) ProgressBar {
+	bb := &BaseBar{
+		Filler: ` `,
+		Left:   &MarkRatio{},
+		Right: &MarkRoll{
+			Over: ` `,
+			Roll: []string{`*`, `*`, ` `, ` `},
+		},
+	}
 	p := &BaseProgressBar{
 		Marks: Marks{
-			Split: `|`,
+			Split: ``,
 			Slice: []Mark{
 				&MarkText{
-					Max:  30,
 					Text: content,
 				},
+				&MarkText{
+					Text: ctc.BackgroundRed.String(),
+				},
 				&BarMark{
-					Width: 80,
-					PaddingBarForm: &BaseBar{
-						Filler: `>`,
+					Width:          60,
+					PaddingBarForm: bb,
+					MidMarkForm: &MarkText{
+						Text: ctc.Reset.String(),
 					},
-					MidMarkForm: &MarkRoll{
-						Over: `>`,
-						Roll: []string{`\`, `|`, `/`, `|`},
-					},
-					PendingBarForm: &BaseBar{
-						Filler: `|`,
+					PendingBarForm: bb,
+				},
+				&Marks{
+					Split: ` `,
+					Slice: []Mark{
+						&MarkPercent{},
+						&MarkAfter{},
 					},
 				},
-				&MarkPercent{},
-				&MarkRatio{},
-				&MarkAfter{},
 			},
 		},
 	}
