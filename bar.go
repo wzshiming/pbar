@@ -17,6 +17,7 @@ type BaseBar struct {
 	Right  Mark
 }
 
+// BarFormat returns bar string
 func (b *BaseBar) BarFormat(info *Info, offset, length, total int) string {
 	mask := []rune(b.Filler)
 	end := offset + length

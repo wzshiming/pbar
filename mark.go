@@ -17,6 +17,7 @@ type Marks struct {
 	Slice []Mark
 }
 
+// MarkFormat returns mark string
 func (m *Marks) MarkFormat(info *Info) string {
 	ss := []string{}
 	for _, v := range m.Slice {
@@ -28,13 +29,15 @@ func (m *Marks) MarkFormat(info *Info) string {
 // MarkRatio Show progress in a ratio
 type MarkRatio struct{}
 
+// MarkFormat returns mark string
 func (b *MarkRatio) MarkFormat(info *Info) string {
 	return fmt.Sprintf("%d/%d", info.Current, info.Total)
 }
 
-// MarkRatio Show progress in a percent
+// MarkPercent Show progress in a percent
 type MarkPercent struct{}
 
+// MarkFormat returns mark string
 func (b *MarkPercent) MarkFormat(info *Info) string {
 	per := 0.0
 	if info.Total != 0 {
@@ -49,6 +52,7 @@ type MarkRoll struct {
 	Roll []string
 }
 
+// MarkFormat returns mark string
 func (b *MarkRoll) MarkFormat(info *Info) string {
 	if info.IsComplete() {
 		return b.Over
@@ -65,6 +69,7 @@ type MarkText struct {
 	Filler string
 }
 
+// MarkFormat returns mark string
 func (b *MarkText) MarkFormat(info *Info) string {
 	text := b.Text
 	if b.Width <= 0 {
@@ -100,6 +105,7 @@ type MarkAfter struct {
 	endAt time.Time
 }
 
+// MarkFormat returns mark string
 func (b *MarkAfter) MarkFormat(info *Info) string {
 	if info.StartTime.IsZero() {
 		info.StartTime = time.Now()

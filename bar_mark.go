@@ -12,6 +12,7 @@ type BarMark struct {
 	PendingBarForm Bar
 }
 
+// MarkFormat returns mark string
 func (p *BarMark) MarkFormat(info *Info) string {
 
 	cur := int(info.Current)

@@ -33,7 +33,7 @@ func (r *Renderer) print(s string) {
 	r.output.Write(*(*[]byte)(unsafe.Pointer(&s)))
 }
 
-// Print
+// Print renderer
 func (r *Renderer) Print() {
 	r.print(r.pbs.String())
 }
