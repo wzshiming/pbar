@@ -4,6 +4,7 @@ import (
 	"github.com/wzshiming/ctc"
 )
 
+// NewNormalStyle normal style
 func NewNormalStyle(content string) Mark {
 	p := &Marks{
 		Split: `|`,
@@ -35,6 +36,7 @@ func NewNormalStyle(content string) Mark {
 	return p
 }
 
+// NewTTYShowStyle TTY show style
 func NewTTYShowStyle(content string) Mark {
 	p := &Marks{
 		Split: `|`,
@@ -60,6 +62,7 @@ func NewTTYShowStyle(content string) Mark {
 	return p
 }
 
+// NewBreakStyle break style
 func NewBreakStyle(content string) Mark {
 	p := &Marks{
 		Split: `|`,
@@ -91,6 +94,7 @@ func NewBreakStyle(content string) Mark {
 	return p
 }
 
+// NewAddedStyle added style
 func NewAddedStyle(content string) Mark {
 	p := &Marks{
 		Slice: []Mark{
@@ -130,6 +134,7 @@ func NewAddedStyle(content string) Mark {
 	return p
 }
 
+// NewFillStyle fill style
 func NewFillStyle(content string) Mark {
 	bb := &BaseBar{
 		Filler: ` `,
@@ -171,6 +176,7 @@ func NewFillStyle(content string) Mark {
 	return p
 }
 
+// NewFillRedStyle fill red style
 func NewFillRedStyle(content string) Mark {
 	bb := &BaseBar{
 		Filler: ` `,
