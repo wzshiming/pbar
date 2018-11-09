@@ -11,21 +11,6 @@ type Mark interface {
 	MarkFormat(info *Info) string
 }
 
-// Marks is a combination of multiple Marks
-type Marks struct {
-	Split string
-	Slice []Mark
-}
-
-// MarkFormat returns mark string
-func (m *Marks) MarkFormat(info *Info) string {
-	ss := []string{}
-	for _, v := range m.Slice {
-		ss = append(ss, v.MarkFormat(info))
-	}
-	return strings.Join(ss, m.Split)
-}
-
 // MarkRatio Show progress in a ratio
 type MarkRatio struct{}
 

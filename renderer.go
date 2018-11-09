@@ -44,11 +44,11 @@ func (r *Renderer) Clear() {
 	r.isStart = 0
 }
 
-// New adds a new default progress bar
-func (r *Renderer) New(name string) *Info {
-	pb := NewNormalStyle(name)
-	return r.Add(pb)
-}
+// // New adds a new default progress bar
+// func (r *Renderer) New(name string) *Info {
+// 	pb := NewNormalStyle(name)
+// 	return r.Add(pb)
+// }
 
 // Add adds a new progress bar
 func (r *Renderer) Add(pb Mark) *Info {

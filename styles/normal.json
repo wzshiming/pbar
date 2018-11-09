@@ -1,0 +1,39 @@
+[{
+    "_Kind": "Text",
+    "Filler": " ",
+    "Roll": 5,
+    "Width": 20,
+    "Text": "{{.Content}}"
+}, {
+    "_Kind": "Text",
+    "Text": "|"
+}, {
+    "_Kind": "Bar",
+    "Width": 60,
+    "PaddingBarForm": {
+        "Filler": "="
+    },
+    "MidMarkForm": [{
+        "_Kind": "Roll",
+        "Over": "=",
+        "Roll": ["-", "\\", "|", "/"]
+    }],
+    "PendingBarForm": {
+        "Filler": "-"
+    }
+}, {
+    "_Kind": "Text",
+    "Text": "|"
+}, {
+    "_Kind": "Percent"
+}, {
+    "_Kind": "Text",
+    "Text": "|"
+}, {
+    "_Kind": "Ratio"
+}, {
+    "_Kind": "Text",
+    "Text": "|"
+}, {
+    "_Kind": "After"
+}]

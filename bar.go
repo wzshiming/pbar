@@ -4,21 +4,65 @@ import (
 	"strings"
 )
 
-// Bar Mark progress is a bar
-type Bar interface {
-	BarFormat(info *Info, offset, length, total int) string
+// MarkBar basic implementation progress bar mark
+type MarkBar struct {
+	Width          int
+	PaddingBarForm *Bar
+	MidMarkForm    *Marks
+	PendingBarForm *Bar
 }
 
-// BaseBar basic implementation bar
-type BaseBar struct {
+// MarkFormat returns mark string
+func (p *MarkBar) MarkFormat(info *Info) string {
+
+	cur := int(info.Current)
+	tol := int(info.Total)
+	if cur > tol {
+		cur = tol
+	}
+
+	if p.Width > 0 {
+		width := p.Width
+		if tol != 0 {
+			cur *= width
+			cur /= tol
+			tol = width
+		} else {
+			tol = width
+			cur = 0
+		}
+	}
+
+	mid := ""
+	padding := ""
+	pending := ""
+
+	if p.MidMarkForm != nil {
+		mid = p.MidMarkForm.MarkFormat(info)
+	}
+
+	if p.PaddingBarForm != nil {
+		padding = p.PaddingBarForm.BarFormat(info, 0, cur, tol)
+	}
+
+	if p.PendingBarForm != nil {
+		pending = p.PendingBarForm.BarFormat(info, cur, tol-cur, tol)
+	}
+
+	info.Refresh++
+	return strings.Join([]string{padding, mid, pending}, "")
+}
+
+// Bar basic implementation bar
+type Bar struct {
 	Filler string
-	Left   Mark
-	Mid    Mark
-	Right  Mark
+	Left   *Marks
+	Mid    *Marks
+	Right  *Marks
 }
 
 // BarFormat returns bar string
-func (b *BaseBar) BarFormat(info *Info, offset, length, total int) string {
+func (b *Bar) BarFormat(info *Info, offset, length, total int) string {
 	mask := []rune(b.Filler)
 	end := offset + length
 	if m := total / len(mask); m > 0 {
