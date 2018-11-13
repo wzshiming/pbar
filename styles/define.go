@@ -1,38 +1,29 @@
 package styles
 
 import (
-	"bytes"
-	"text/template"
-	"unsafe"
-
 	"github.com/wzshiming/pbar"
 )
 
-var Normal, _ = NewConfig(MustAsset("normal.json"))
+func Normal() *pbar.Marks {
+	bar, _ := OpenBuiltinStyle("normal.json")
+	return bar
+}
 
 type Config struct {
-	temp *template.Template
+	conf []byte
 }
 
-func NewConfig(conf []byte) (*Config, error) {
-	config := *(*string)(unsafe.Pointer(&conf))
-	temp, err := template.New("").Parse(config)
+func OpenBuiltinStyle(name string) (*pbar.Marks, error) {
+	conf, err := Asset(name + ".json")
 	if err != nil {
 		return nil, err
 	}
-	return &Config{
-		temp: temp,
-	}, nil
+	return NewConfig(conf)
 }
 
-func (c *Config) New(option map[string]interface{}) (pbar.Mark, error) {
-	buf := bytes.NewBuffer(nil)
-	err := c.temp.Execute(buf, option)
-	if err != nil {
-		return nil, err
-	}
+func NewConfig(conf []byte) (*pbar.Marks, error) {
 	marks := &pbar.Marks{}
-	err = marks.UnmarshalJSON(buf.Bytes())
+	err := marks.UnmarshalJSON(conf)
 	if err != nil {
 		return nil, err
 	}

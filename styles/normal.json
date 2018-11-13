@@ -1,39 +1,95 @@
-[{
-    "_Kind": "Text",
-    "Filler": " ",
-    "Roll": 5,
-    "Width": 20,
-    "Text": "{{.Content}}"
-}, {
-    "_Kind": "Text",
-    "Text": "|"
-}, {
-    "_Kind": "Bar",
-    "Width": 60,
-    "PaddingBarForm": {
-        "Filler": "="
-    },
-    "MidMarkForm": [{
-        "_Kind": "Roll",
-        "Over": "=",
-        "Roll": ["-", "\\", "|", "/"]
-    }],
-    "PendingBarForm": {
-        "Filler": "-"
+[
+ "|"
+,{
+  "Denom": {
+   "Val":   0
+  ,"_Name": "Total"
+  }
+ ,"Filler": " "
+ ,"Numer":  {
+   "Val":   0
+  ,"_Name": "Current"
+  }
+ ,"Roll": 5
+ ,"Text": {
+   "Val":   "<No Title>"
+  ,"_Name": "Title"
+  }
+ ,"Width": 20
+ ,"_Kind": "Text"
+ }
+,"|"
+,{
+  "Denom": {
+   "Val":   0
+  ,"_Name": "Total"
+  }
+ ,"MidMarkForm": [
+   {
+    "Denom": {
+     "Val":   0
+    ,"_Name": "Total"
     }
-}, {
-    "_Kind": "Text",
-    "Text": "|"
-}, {
-    "_Kind": "Percent"
-}, {
-    "_Kind": "Text",
-    "Text": "|"
-}, {
-    "_Kind": "Ratio"
-}, {
-    "_Kind": "Text",
-    "Text": "|"
-}, {
-    "_Kind": "After"
-}]
+   ,"Numer": {
+     "Val":   0
+    ,"_Name": "Current"
+    }
+   ,"Over": "="
+   ,"Roll": [
+     "-","\\"
+    ,"|","/"
+    ]
+   ,"_Kind": "Roll"
+   }
+  ]
+ ,"Numer": {
+   "Val":   0
+  ,"_Name": "Current"
+  }
+ ,"PaddingBarForm": {
+   "Filler": "="
+  }
+ ,"PendingBarForm": {
+   "Filler": "-"
+  }
+ ,"Width": 60
+ ,"_Kind": "Bar"
+ }
+,"|"
+,{
+  "Denom": {
+   "Val":   0
+  ,"_Name": "Total"
+  }
+ ,"Numer": {
+   "Val":   0
+  ,"_Name": "Current"
+  }
+ ,"_Kind": "PerCent"
+ }
+,"|"
+,{
+  "Denom": {
+   "Val":   0
+  ,"_Name": "Total"
+  }
+ ,"Numer": {
+   "Val":   0
+  ,"_Name": "Current"
+  }
+ ,"_Kind": "Per"
+ }
+,"|"
+,{
+  "Denom": {
+   "Val":   0
+  ,"_Name": "Total"
+  }
+ ,"Numer": {
+   "Val":   0
+  ,"_Name": "Current"
+  }
+ ,"_Kind": "After"
+ }
+,"|"
+]

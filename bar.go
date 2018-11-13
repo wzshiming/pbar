@@ -7,6 +7,7 @@ import (
 // MarkBar basic implementation progress bar mark
 type MarkBar struct {
 	Width          int
+	Numer, Denom   *MarkInput
 	PaddingBarForm *Bar
 	MidMarkForm    *Marks
 	PendingBarForm *Bar
@@ -14,9 +15,10 @@ type MarkBar struct {
 
 // MarkFormat returns mark string
 func (p *MarkBar) MarkFormat(info *Info) string {
-
-	cur := int(info.Current)
-	tol := int(info.Total)
+	numer, _ := p.Numer.Int64()
+	denom, _ := p.Denom.Int64()
+	cur := int(numer)
+	tol := int(denom)
 	if cur > tol {
 		cur = tol
 	}

@@ -6,40 +6,44 @@ import (
 	"time"
 )
 
-// Mark Marking progress can be any text that represents progress
-type Mark interface {
+// Marker Marking progress can be any text that represents progress
+type Marker interface {
 	MarkFormat(info *Info) string
 }
 
-// MarkRatio Show progress in a ratio
-type MarkRatio struct{}
-
-// MarkFormat returns mark string
-func (b *MarkRatio) MarkFormat(info *Info) string {
-	return fmt.Sprintf("%d/%d", info.Current, info.Total)
+type MarkPerCent struct {
+	Numer, Denom *MarkInput
 }
 
-// MarkPercent Show progress in a percent
-type MarkPercent struct{}
+// MarkPerCent returns mark string
+func (b *MarkPerCent) MarkFormat(info *Info) string {
+	n, _ := b.Numer.Float64()
+	d, _ := b.Denom.Float64()
+	return fmt.Sprintf("%3.0f%%", n/d*100)
+}
+
+// MarkPer Show progress in a percent
+type MarkPer struct {
+	Numer, Denom *MarkInput
+}
 
 // MarkFormat returns mark string
-func (b *MarkPercent) MarkFormat(info *Info) string {
-	per := 0.0
-	if info.Total != 0 {
-		per = 100 * float64(info.Current) / float64(info.Total)
-	}
-	return fmt.Sprintf("%6.2f%%", per)
+func (b *MarkPer) MarkFormat(info *Info) string {
+	n := b.Numer.String()
+	d := b.Denom.String()
+	return strings.Repeat(" ", len(d)-len(n)) + fmt.Sprintf("%s/%s", n, d)
 }
 
 // MarkRoll Indicates that no response has been lost
 type MarkRoll struct {
-	Over string
-	Roll []string
+	Numer, Denom *MarkInput
+	Over         string
+	Roll         []string
 }
 
 // MarkFormat returns mark string
 func (b *MarkRoll) MarkFormat(info *Info) string {
-	if info.IsComplete() {
+	if isComplete(b.Numer, b.Denom) {
 		return b.Over
 	}
 	i := info.Refresh % len(b.Roll)
@@ -48,22 +52,23 @@ func (b *MarkRoll) MarkFormat(info *Info) string {
 
 // MarkText Show text
 type MarkText struct {
-	Text   string
-	Width  int
-	Roll   int
-	Filler string
+	Numer, Denom *MarkInput
+	Text         *MarkInput
+	Width        int
+	Roll         int
+	Filler       string
 }
 
 // MarkFormat returns mark string
 func (b *MarkText) MarkFormat(info *Info) string {
-	text := b.Text
+	text := b.Text.String()
 	if b.Width <= 0 {
 		return text
 	}
 
 	sub := (len(text) - b.Width)
 	if sub > 0 {
-		if b.Roll > 0 && !info.IsComplete() {
+		if b.Roll > 0 && !isComplete(b.Numer, b.Denom) {
 			index := (info.Refresh / b.Roll) % (2 * sub)
 			if sub > index {
 				text = text[index : index+b.Width]
@@ -87,7 +92,8 @@ func (b *MarkText) MarkFormat(info *Info) string {
 
 // MarkAfter Show the after time
 type MarkAfter struct {
-	endAt time.Time
+	Numer, Denom *MarkInput
+	endAt        time.Time
 }
 
 // MarkFormat returns mark string
@@ -95,11 +101,22 @@ func (b *MarkAfter) MarkFormat(info *Info) string {
 	if info.StartTime.IsZero() {
 		info.StartTime = time.Now()
 	}
-	if info.IsComplete() {
+
+	ret := ""
+	if isComplete(b.Numer, b.Denom) {
 		if b.endAt.IsZero() {
 			b.endAt = time.Now()
 		}
-		return b.endAt.Sub(info.StartTime).Truncate(time.Second).String()
+		ret = b.endAt.Sub(info.StartTime).Truncate(time.Second).String()
+	} else {
+		ret = time.Now().Sub(info.StartTime).Truncate(time.Second).String()
 	}
-	return time.Now().Sub(info.StartTime).Truncate(time.Second).String()
+
+	return fmt.Sprintf("%5s", ret)
+}
+
+func isComplete(numer, denom *MarkInput) bool {
+	n, _ := numer.Float64()
+	d, _ := denom.Float64()
+	return d != 0 && n >= d
 }
