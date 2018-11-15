@@ -20,7 +20,7 @@ var (
 func init() {
 	flag.Usage = func() {
 		w := os.Stderr
-		fmt.Fprintf(w, "jsonfmt:\n")
+		fmt.Fprintf(w, "pbar:\n")
 		fmt.Fprintf(w, "Usage:\n")
 		fmt.Fprintf(w, "    %s [Options] -- Match progress information for progress bar from input\n", os.Args[0])
 		fmt.Fprintf(w, "Options:\n")

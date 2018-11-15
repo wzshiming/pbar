@@ -6,11 +6,13 @@ import (
 	"regexp"
 
 	"github.com/wzshiming/cursor"
+	"github.com/wzshiming/deepclone"
 	"github.com/wzshiming/pbar"
 )
 
 func RunBar(reader io.Reader, writer io.Writer, bar *pbar.Marks, reg *regexp.Regexp, titleKey string) error {
 	stdin := bufio.NewReader(reader)
+	bars := map[string]*pbar.Marks{}
 	order := map[string]int{}
 	subName := reg.SubexpNames()
 	for {
@@ -22,8 +24,6 @@ func RunBar(reader io.Reader, writer io.Writer, bar *pbar.Marks, reg *regexp.Reg
 			return err
 		}
 		subData := reg.FindSubmatch(line)
-		title := ""
-
 		if len(subData) == 0 {
 			io.WriteString(writer, "\r")
 			io.WriteString(writer, cursor.RawClearLine())
@@ -31,10 +31,11 @@ func RunBar(reader io.Reader, writer io.Writer, bar *pbar.Marks, reg *regexp.Reg
 			io.WriteString(writer, "\r")
 			continue
 		}
+
+		title := ""
 		for i, name := range subName {
 			if name != "" {
 				val := string(subData[i])
-				bar.Input(name, val)
 				if name == titleKey {
 					title = val
 				}
@@ -43,18 +44,23 @@ func RunBar(reader io.Reader, writer io.Writer, bar *pbar.Marks, reg *regexp.Reg
 
 		if _, ok := order[title]; !ok {
 			order[title] = len(order)
-			io.WriteString(writer, "\r")
-			io.WriteString(writer, cursor.RawClearLine())
-			io.WriteString(writer, bar.String())
+			bars[title] = deepclone.Clone(bar).(*pbar.Marks)
 			io.WriteString(writer, "\n")
-		} else {
-			off := len(order) - order[title]
-			io.WriteString(writer, "\r")
-			io.WriteString(writer, cursor.RawMoveUp(uint64(off)))
-			io.WriteString(writer, cursor.RawClearLine())
-			io.WriteString(writer, bar.String())
-			io.WriteString(writer, "\r")
-			io.WriteString(writer, cursor.RawMoveDown(uint64(off)))
 		}
+
+		for i, name := range subName {
+			if name != "" {
+				val := string(subData[i])
+				bars[title].Input(name, val)
+			}
+		}
+
+		off := len(order) - order[title]
+		io.WriteString(writer, "\r")
+		io.WriteString(writer, cursor.RawMoveUp(uint64(off)))
+		io.WriteString(writer, cursor.RawClearLine())
+		io.WriteString(writer, bars[title].String())
+		io.WriteString(writer, "\r")
+		io.WriteString(writer, cursor.RawMoveDown(uint64(off)))
 	}
 }

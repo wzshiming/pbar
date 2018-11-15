@@ -2,7 +2,6 @@
 // sources:
 // normal.json
 // pad.json
-// simple.json
 // DO NOT EDIT!
 
 package styles
@@ -85,7 +84,7 @@ func normalJson() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "normal.json", size: 1218, mode: os.FileMode(420), modTime: time.Unix(1542263473, 0)}
+	info := bindataFileInfo{name: "normal.json", size: 1218, mode: os.FileMode(420), modTime: time.Unix(1542272781, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -105,27 +104,7 @@ func padJson() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "pad.json", size: 2538, mode: os.FileMode(420), modTime: time.Unix(1542263473, 0)}
-	a := &asset{bytes: bytes, info: info}
-	return a, nil
-}
-
-var _simpleJson = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x8a\xe6\x52\xa8\xe6\x52\x50\x50\x8a\xf7\xce\xcc\x4b\x51\xb2\x52\x50\xf2\xcc\x2b\x28\x2d\x51\xd2\x01\x8b\xf9\x25\xe6\xa6\x82\xc4\x42\x32\x4b\x72\x52\x21\x62\x61\x89\x39\x20\x11\xbf\x7c\x85\x12\xb0\x20\x97\x42\xad\x0e\x97\x82\x52\x0d\x48\x16\xd5\xa0\x80\xd4\x22\xe7\xd4\x3c\xa8\x51\x7e\xa5\xb9\xa9\x45\x4a\x56\x60\x25\x58\x2d\x43\xb2\xcd\xb9\xb4\xa8\x08\xa4\x91\x4b\x01\x6c\xb6\x82\x92\x4b\x6a\x5e\x7e\x2e\x91\x9a\x43\xf2\x4b\x12\x73\xc0\x5a\xf1\xba\x6c\x10\xba\xca\x31\xad\x64\x30\xb8\x8b\x2b\x16\x10\x00\x00\xff\xff\xfd\x30\x4e\x7a\x13\x02\x00\x00")
-
-func simpleJsonBytes() ([]byte, error) {
-	return bindataRead(
-		_simpleJson,
-		"simple.json",
-	)
-}
-
-func simpleJson() (*asset, error) {
-	bytes, err := simpleJsonBytes()
-	if err != nil {
-		return nil, err
-	}
-
-	info := bindataFileInfo{name: "simple.json", size: 531, mode: os.FileMode(420), modTime: time.Unix(1542263473, 0)}
+	info := bindataFileInfo{name: "pad.json", size: 2538, mode: os.FileMode(420), modTime: time.Unix(1542272781, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -184,7 +163,6 @@ func AssetNames() []string {
 var _bindata = map[string]func() (*asset, error){
 	"normal.json": normalJson,
 	"pad.json": padJson,
-	"simple.json": simpleJson,
 }
 
 // AssetDir returns the file names below a certain
@@ -229,7 +207,6 @@ type bintree struct {
 var _bintree = &bintree{nil, map[string]*bintree{
 	"normal.json": &bintree{normalJson, map[string]*bintree{}},
 	"pad.json": &bintree{padJson, map[string]*bintree{}},
-	"simple.json": &bintree{simpleJson, map[string]*bintree{}},
 }}
 
 // RestoreAsset restores an asset under the given directory
