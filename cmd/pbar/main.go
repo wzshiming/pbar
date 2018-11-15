@@ -3,12 +3,12 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"regexp"
 
 	"github.com/wzshiming/pbar/run"
 	"github.com/wzshiming/pbar/styles"
-	"gopkg.in/ffmt.v1"
 )
 
 var (
@@ -32,14 +32,23 @@ func init() {
 func main() {
 	bar, err := styles.OpenBuiltinStyle(*style)
 	if err != nil {
-		ffmt.Mark(err)
-		flag.Usage()
-		return
+		conf, err0 := ioutil.ReadFile(*style)
+		if err0 != nil {
+			fmt.Fprint(os.Stderr, err)
+			flag.Usage()
+			return
+		}
+		bar, err = styles.NewConfig(conf)
+		if err != nil {
+			fmt.Fprint(os.Stderr, err)
+			flag.Usage()
+			return
+		}
 	}
 
 	reg, err := regexp.Compile(*reg)
 	if err != nil {
-		ffmt.Mark(err)
+		fmt.Fprint(os.Stderr, err)
 		flag.Usage()
 		return
 	}
