@@ -6,15 +6,28 @@ import (
 
 // MarkBar basic implementation progress bar mark
 type MarkBar struct {
-	Width          int
-	Numer, Denom   *MarkInput
-	PaddingBarForm *Bar
-	MidMarkForm    *Marks
-	PendingBarForm *Bar
+	Kind         string `json:"_Kind"`
+	Width        int
+	Numer, Denom *MarkInput
+
+	// Padding
+	PaddingFiller string
+	PaddingLeft   *Marks `json:",omitempty"`
+	PaddingMid    *Marks `json:",omitempty"`
+	PaddingRight  *Marks `json:",omitempty"`
+
+	// Bar mid
+	Mid *Marks
+
+	// Pending
+	PendingFiller string
+	PendingLeft   *Marks `json:",omitempty"`
+	PendingMid    *Marks `json:",omitempty"`
+	PendingRight  *Marks `json:",omitempty"`
 }
 
 // MarkFormat returns mark string
-func (p *MarkBar) MarkFormat(info *Info) string {
+func (p *MarkBar) String() string {
 	numer, _ := p.Numer.Int64()
 	denom, _ := p.Denom.Int64()
 	cur := int(numer)
@@ -39,50 +52,41 @@ func (p *MarkBar) MarkFormat(info *Info) string {
 	padding := ""
 	pending := ""
 
-	if p.MidMarkForm != nil {
-		mid = p.MidMarkForm.MarkFormat(info)
+	if p.Mid != nil {
+		mid = p.Mid.String()
 	}
 
-	if p.PaddingBarForm != nil {
-		padding = p.PaddingBarForm.BarFormat(info, 0, cur, tol)
+	if fill := p.PaddingFiller; fill != "" {
+		padding = barFormat(fill, p.PaddingLeft, p.PaddingMid, p.PaddingRight, 0, cur, tol)
 	}
 
-	if p.PendingBarForm != nil {
-		pending = p.PendingBarForm.BarFormat(info, cur, tol-cur, tol)
+	if fill := p.PendingFiller; fill != "" {
+		pending = barFormat(fill, p.PendingLeft, p.PendingMid, p.PendingRight, cur, tol-cur, tol)
 	}
 
-	info.Refresh++
 	return strings.Join([]string{padding, mid, pending}, "")
 }
 
-// Bar basic implementation bar
-type Bar struct {
-	Filler string
-	Left   *Marks
-	Mid    *Marks
-	Right  *Marks
-}
-
-// BarFormat returns bar string
-func (b *Bar) BarFormat(info *Info, offset, length, total int) string {
-	mask := []rune(b.Filler)
+// barFormat returns bar string
+func barFormat(filler string, left, mid, right *Marks, offset, length, total int) string {
+	mask := []rune(filler)
 	end := offset + length
 	if m := total / len(mask); m > 0 {
 		mask = []rune(strings.Repeat(string(mask), m+1))
 	}
 
-	if b.Left != nil {
-		ss := []rune(b.Left.MarkFormat(info))
+	if left != nil {
+		ss := []rune(left.String())
 		copy(mask[:len(ss)], ss)
 	}
 
-	if b.Right != nil {
-		ss := []rune(b.Right.MarkFormat(info))
+	if right != nil {
+		ss := []rune(right.String())
 		copy(mask[len(mask)-len(ss)-1:], ss)
 	}
 
-	if b.Mid != nil {
-		ss := []rune(b.Mid.MarkFormat(info))
+	if mid != nil {
+		ss := []rune(mid.String())
 		beg := len(mask)/2 - len(ss)/2
 		copy(mask[beg:beg+len(ss)], ss)
 	}

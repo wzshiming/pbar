@@ -8,15 +8,16 @@ import (
 
 // Marker Marking progress can be any text that represents progress
 type Marker interface {
-	MarkFormat(info *Info) string
+	fmt.Stringer
 }
 
 type MarkPerCent struct {
+	Kind         string `json:"_Kind"`
 	Numer, Denom *MarkInput
 }
 
 // MarkPerCent returns mark string
-func (b *MarkPerCent) MarkFormat(info *Info) string {
+func (b *MarkPerCent) String() string {
 	n, _ := b.Numer.Float64()
 	d, _ := b.Denom.Float64()
 	return fmt.Sprintf("%3.0f%%", n/d*100)
@@ -24,44 +25,56 @@ func (b *MarkPerCent) MarkFormat(info *Info) string {
 
 // MarkPer Show progress in a percent
 type MarkPer struct {
+	Kind         string `json:"_Kind"`
 	Numer, Denom *MarkInput
 }
 
 // MarkFormat returns mark string
-func (b *MarkPer) MarkFormat(info *Info) string {
+func (b *MarkPer) String() string {
 	n := b.Numer.String()
 	d := b.Denom.String()
-	return strings.Repeat(" ", len(d)-len(n)) + fmt.Sprintf("%s/%s", n, d)
+
+	r := fmt.Sprintf("%s/%s", n, d)
+	s := len(d) - len(n)
+	if s > 0 {
+		r = strings.Repeat(" ", s) + r
+	}
+	return r
 }
 
 // MarkRoll Indicates that no response has been lost
 type MarkRoll struct {
+	Kind         string `json:"_Kind"`
 	Numer, Denom *MarkInput
 	Over         string
 	Roll         []string
+	Refresh      int `json:",omitempty"`
 }
 
 // MarkFormat returns mark string
-func (b *MarkRoll) MarkFormat(info *Info) string {
+func (b *MarkRoll) String() string {
 	if isComplete(b.Numer, b.Denom) {
 		return b.Over
 	}
-	i := info.Refresh % len(b.Roll)
+	i := b.Refresh % len(b.Roll)
+	b.Refresh++
 	return b.Roll[i]
 }
 
-// MarkText Show text
-type MarkText struct {
+// MarkScroll Show text
+type MarkScroll struct {
+	Kind         string `json:"_Kind"`
 	Numer, Denom *MarkInput
-	Text         *MarkInput
+	Content      *MarkInput
 	Width        int
 	Roll         int
 	Filler       string
+	Refresh      int `json:",omitempty"`
 }
 
-// MarkFormat returns mark string
-func (b *MarkText) MarkFormat(info *Info) string {
-	text := b.Text.String()
+// MarkScroll returns mark string
+func (b *MarkScroll) String() string {
+	text := b.Content.String()
 	if b.Width <= 0 {
 		return text
 	}
@@ -69,7 +82,7 @@ func (b *MarkText) MarkFormat(info *Info) string {
 	sub := (len(text) - b.Width)
 	if sub > 0 {
 		if b.Roll > 0 && !isComplete(b.Numer, b.Denom) {
-			index := (info.Refresh / b.Roll) % (2 * sub)
+			index := (b.Refresh / b.Roll) % (2 * sub)
 			if sub > index {
 				text = text[index : index+b.Width]
 			} else {
@@ -79,27 +92,29 @@ func (b *MarkText) MarkFormat(info *Info) string {
 		} else {
 			text = text[:b.Width-1] + "."
 		}
-	} else if sub < 0 && b.Filler != "" {
+	} else if fill := b.Filler; sub < 0 && fill != "" {
 		sub = -sub
-		mask := []rune(b.Filler)
+		mask := []rune(fill)
 		if m := sub / len(mask); m > 0 {
 			mask = []rune(strings.Repeat(string(mask), m+1))
 		}
 		text += string(mask[:sub])
 	}
+	b.Refresh++
 	return text
 }
 
 // MarkAfter Show the after time
 type MarkAfter struct {
-	Numer, Denom *MarkInput
-	endAt        time.Time
+	Kind           string `json:"_Kind"`
+	Numer, Denom   *MarkInput
+	startAt, endAt time.Time
 }
 
 // MarkFormat returns mark string
-func (b *MarkAfter) MarkFormat(info *Info) string {
-	if info.StartTime.IsZero() {
-		info.StartTime = time.Now()
+func (b *MarkAfter) String() string {
+	if b.startAt.IsZero() {
+		b.startAt = time.Now()
 	}
 
 	ret := ""
@@ -107,9 +122,9 @@ func (b *MarkAfter) MarkFormat(info *Info) string {
 		if b.endAt.IsZero() {
 			b.endAt = time.Now()
 		}
-		ret = b.endAt.Sub(info.StartTime).Truncate(time.Second).String()
+		ret = b.endAt.Sub(b.startAt).Truncate(time.Second).String()
 	} else {
-		ret = time.Now().Sub(info.StartTime).Truncate(time.Second).String()
+		ret = time.Now().Sub(b.startAt).Truncate(time.Second).String()
 	}
 
 	return fmt.Sprintf("%5s", ret)

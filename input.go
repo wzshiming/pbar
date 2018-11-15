@@ -7,8 +7,9 @@ import (
 )
 
 type MarkInput struct {
-	Name string `json:"_Name"`
-	Val  json.RawMessage
+	Kind string          `json:"_Kind"`
+	Name string          `json:"_Name"`
+	Val  json.RawMessage `json:",omitempty"`
 }
 
 func (m *MarkInput) Input(val string) {
@@ -34,19 +35,20 @@ func (m *MarkInput) String() string {
 	return *(*string)(unsafe.Pointer(&v))
 }
 
-// MarkFormat returns mark string
-func (m *MarkInput) MarkFormat(info *Info) string {
-	return m.String()
+type _markInput MarkInput
+
+func (m *MarkInput) MarshalJSON() ([]byte, error) {
+	if m.Name == "" {
+		return []byte(m.Val), nil
+	}
+	return json.Marshal(_markInput(*m))
 }
 
 func (m *MarkInput) UnmarshalJSON(data []byte) error {
 	data = bytes.TrimSpace(data)
 
 	if data[0] == '{' {
-		var markInput struct {
-			Name string `json:"_Name"`
-			Val  json.RawMessage
-		}
+		var markInput _markInput
 		err := json.Unmarshal(data, &markInput)
 		if err != nil {
 			return err

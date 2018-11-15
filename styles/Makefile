@@ -10,11 +10,11 @@ all: json_fmt styles_bind
 styles_bind: tool_bindata
 	go-bindata -pkg styles -o styles.go *.json
 
-json_fmt: tool_jsonfmt
-	jsonfmt -w *.json
+json_fmt: tool_stylefmt
+	stylefmt -w *.json
 
 tool_bindata:
 	go get github.com/wzshiming/go-bindata/go-bindata
 
-tool_jsonfmt:
-	go get gopkg.in/ffmt.v1/cmd/jsonfmt
+tool_stylefmt:
+	go get github.com/wzshiming/pbar/cmd/stylefmt

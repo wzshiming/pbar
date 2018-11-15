@@ -1,0 +1,174 @@
+[
+ "\u001b[0;7m",
+ {
+  "_Kind": "Bar",
+  "Width": 90,
+  "Numer": {
+   "_Kind": "Input",
+   "_Name": "Current"
+  },
+  "Denom": {
+   "_Kind": "Input",
+   "_Name": "Total"
+  },
+  "PaddingFiller": " ",
+  "PaddingLeft": [
+   {
+    "_Kind": "Scroll",
+    "Numer": {
+     "_Kind": "Input",
+     "_Name": "Current"
+    },
+    "Denom": {
+     "_Kind": "Input",
+     "_Name": "Total"
+    },
+    "Content": {
+     "_Kind": "Input",
+     "_Name": "Title",
+     "Val": "No title"
+    },
+    "Width": 30,
+    "Roll": 5,
+    "Filler": " "
+   }
+  ],
+  "PaddingMid": [
+   {
+    "_Kind": "PerCent",
+    "Numer": {
+     "_Kind": "Input",
+     "_Name": "Current"
+    },
+    "Denom": {
+     "_Kind": "Input",
+     "_Name": "Total"
+    }
+   },
+   " | ",
+   {
+    "_Kind": "Per",
+    "Numer": {
+     "_Kind": "Input",
+     "_Name": "Current"
+    },
+    "Denom": {
+     "_Kind": "Input",
+     "_Name": "Total"
+    }
+   }
+  ],
+  "PaddingRight": [
+   {
+    "_Kind": "After",
+    "Numer": {
+     "_Kind": "Input",
+     "_Name": "Current"
+    },
+    "Denom": {
+     "_Kind": "Input",
+     "_Name": "Total"
+    }
+   },
+   {
+    "_Kind": "Roll",
+    "Numer": {
+     "_Kind": "Input",
+     "_Name": "Current"
+    },
+    "Denom": {
+     "_Kind": "Input",
+     "_Name": "Total"
+    },
+    "Over": "*",
+    "Roll": [
+     "-",
+     "\\",
+     "|",
+     "/"
+    ]
+   }
+  ],
+  "Mid": [
+   "\u001b[0m"
+  ],
+  "PendingFiller": " ",
+  "PendingLeft": [
+   {
+    "_Kind": "Scroll",
+    "Numer": {
+     "_Kind": "Input",
+     "_Name": "Current"
+    },
+    "Denom": {
+     "_Kind": "Input",
+     "_Name": "Total"
+    },
+    "Content": {
+     "_Kind": "Input",
+     "_Name": "Title",
+     "Val": "No title"
+    },
+    "Width": 30,
+    "Roll": 5,
+    "Filler": " "
+   }
+  ],
+  "PendingMid": [
+   {
+    "_Kind": "PerCent",
+    "Numer": {
+     "_Kind": "Input",
+     "_Name": "Current"
+    },
+    "Denom": {
+     "_Kind": "Input",
+     "_Name": "Total"
+    }
+   },
+   " | ",
+   {
+    "_Kind": "Per",
+    "Numer": {
+     "_Kind": "Input",
+     "_Name": "Current"
+    },
+    "Denom": {
+     "_Kind": "Input",
+     "_Name": "Total"
+    }
+   }
+  ],
+  "PendingRight": [
+   {
+    "_Kind": "After",
+    "Numer": {
+     "_Kind": "Input",
+     "_Name": "Current"
+    },
+    "Denom": {
+     "_Kind": "Input",
+     "_Name": "Total"
+    }
+   },
+   {
+    "_Kind": "Roll",
+    "Numer": {
+     "_Kind": "Input",
+     "_Name": "Current"
+    },
+    "Denom": {
+     "_Kind": "Input",
+     "_Name": "Total"
+    },
+    "Over": "*",
+    "Roll": [
+     "-",
+     "\\",
+     "|",
+     "/"
+    ]
+   }
+  ]
+ }
+]

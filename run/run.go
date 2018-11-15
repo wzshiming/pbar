@@ -11,7 +11,6 @@ import (
 
 func RunBar(reader io.Reader, writer io.Writer, bar *pbar.Marks, reg *regexp.Regexp, titleKey string) error {
 	stdin := bufio.NewReader(reader)
-	infos := map[string]*pbar.Info{}
 	order := map[string]int{}
 	subName := reg.SubexpNames()
 	for {
@@ -42,21 +41,18 @@ func RunBar(reader io.Reader, writer io.Writer, bar *pbar.Marks, reg *regexp.Reg
 			}
 		}
 
-		info := infos[title]
-		if info == nil {
-			info = &pbar.Info{}
-			infos[title] = info
+		if _, ok := order[title]; !ok {
 			order[title] = len(order)
 			io.WriteString(writer, "\r")
 			io.WriteString(writer, cursor.RawClearLine())
-			io.WriteString(writer, bar.MarkFormat(info))
+			io.WriteString(writer, bar.String())
 			io.WriteString(writer, "\n")
 		} else {
 			off := len(order) - order[title]
 			io.WriteString(writer, "\r")
 			io.WriteString(writer, cursor.RawMoveUp(uint64(off)))
 			io.WriteString(writer, cursor.RawClearLine())
-			io.WriteString(writer, bar.MarkFormat(info))
+			io.WriteString(writer, bar.String())
 			io.WriteString(writer, "\r")
 			io.WriteString(writer, cursor.RawMoveDown(uint64(off)))
 		}

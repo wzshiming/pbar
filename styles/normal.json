@@ -1,95 +1,94 @@
 [
- "|"
-,{
+ "|",
+ {
+  "_Kind": "Scroll",
+  "Numer": {
+   "_Kind": "Input",
+   "_Name": "Current"
+  },
   "Denom": {
-   "Val":   0
-  ,"_Name": "Total"
-  }
- ,"Filler": " "
- ,"Numer":  {
-   "Val":   0
-  ,"_Name": "Current"
-  }
- ,"Roll": 5
- ,"Text": {
-   "Val":   "<No Title>"
-  ,"_Name": "Title"
-  }
- ,"Width": 20
- ,"_Kind": "Text"
- }
-,"|"
-,{
+   "_Kind": "Input",
+   "_Name": "Total"
+  },
+  "Content": {
+   "_Kind": "Input",
+   "_Name": "Title",
+   "Val": "No title"
+  },
+  "Width": 20,
+  "Roll": 5,
+  "Filler": " "
+ },
+ "|",
+ {
+  "_Kind": "Bar",
+  "Width": 50,
+  "Numer": {
+   "_Kind": "Input",
+   "_Name": "Current"
+  },
   "Denom": {
-   "Val":   0
-  ,"_Name": "Total"
-  }
- ,"MidMarkForm": [
+   "_Kind": "Input",
+   "_Name": "Total"
+  },
+  "PaddingFiller": "=",
+  "Mid": [
    {
+    "_Kind": "Roll",
+    "Numer": {
+     "_Kind": "Input",
+     "_Name": "Current"
+    },
     "Denom": {
-     "Val":   0
-    ,"_Name": "Total"
-    }
-   ,"Numer": {
-     "Val":   0
-    ,"_Name": "Current"
-    }
-   ,"Over": "="
-   ,"Roll": [
-     "-","\\"
-    ,"|","/"
+     "_Kind": "Input",
+     "_Name": "Total"
+    },
+    "Over": "=",
+    "Roll": [
+     "-",
+     "\\",
+     "|",
+     "/"
     ]
-   ,"_Kind": "Roll"
    }
-  ]
- ,"Numer": {
-   "Val":   0
-  ,"_Name": "Current"
-  }
- ,"PaddingBarForm": {
-   "Filler": "="
-  }
- ,"PendingBarForm": {
-   "Filler": "-"
-  }
- ,"Width": 60
- ,"_Kind": "Bar"
- }
-,"|"
-,{
+  ],
+  "PendingFiller": "-"
+ },
+ "|",
+ {
+  "_Kind": "PerCent",
+  "Numer": {
+   "_Kind": "Input",
+   "_Name": "Current"
+  },
   "Denom": {
-   "Val":   0
-  ,"_Name": "Total"
+   "_Kind": "Input",
+   "_Name": "Total"
   }
- ,"Numer": {
-   "Val":   0
-  ,"_Name": "Current"
-  }
- ,"_Kind": "PerCent"
- }
-,"|"
-,{
+ },
+ "|",
+ {
+  "_Kind": "Per",
+  "Numer": {
+   "_Kind": "Input",
+   "_Name": "Current"
+  },
   "Denom": {
-   "Val":   0
-  ,"_Name": "Total"
+   "_Kind": "Input",
+   "_Name": "Total"
   }
- ,"Numer": {
-   "Val":   0
-  ,"_Name": "Current"
-  }
- ,"_Kind": "Per"
- }
-,"|"
-,{
+ },
+ "|",
+ {
+  "_Kind": "After",
+  "Numer": {
+   "_Kind": "Input",
+   "_Name": "Current"
+  },
   "Denom": {
-   "Val":   0
-  ,"_Name": "Total"
+   "_Kind": "Input",
+   "_Name": "Total"
   }
- ,"Numer": {
-   "Val":   0
-  ,"_Name": "Current"
-  }
- ,"_Kind": "After"
- }
-,"|"
+ },
+ "|"
 ]
