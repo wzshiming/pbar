@@ -1,3 +1,4 @@
 #!/bin/sh
 
-./mock.sh | pbar -s pad
+# Single progress bar
+./mock.sh 100 hello | pbar

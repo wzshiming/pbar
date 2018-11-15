@@ -1,28 +1,28 @@
 
 
-
-
-.PHONY: test
-test: pbar
-	cd examples && ./example1.sh
+.PHONY: all
+all: pbar crun
 
 pbar: style_fmt styles_bind sh_fmt
 	go get github.com/wzshiming/pbar/cmd/pbar
 
-styles_bind: tool_bindata
+styles_bind: go-bindata
 	cd styles && go-bindata -pkg styles -o styles.go *.json
 
-style_fmt: tool_stylefmt
+style_fmt: stylefmt
 	cd styles && stylefmt -w *.json
 
-sh_fmt: tool_shfmt
+sh_fmt: shfmt
 	cd examples && shfmt -w *.sh
 
-tool_bindata:
+go-bindata:
 	go get github.com/wzshiming/go-bindata/go-bindata
 
-tool_stylefmt:
+stylefmt:
 	go get github.com/wzshiming/pbar/cmd/stylefmt
 
-tool_shfmt:
+shfmt:
 	go get mvdan.cc/sh/cmd/shfmt
+
+crun:
+	go get github.com/wzshiming/crun/cmd/crun
