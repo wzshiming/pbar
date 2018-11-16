@@ -26,8 +26,8 @@ func RunBar(reader io.Reader, writer io.Writer, bar *pbar.Marks, reg *regexp.Reg
 		subData := reg.FindSubmatch(line)
 		if len(subData) == 0 {
 			io.WriteString(writer, "\r")
-			io.WriteString(writer, cursor.RawClearLine())
 			writer.Write(line)
+			io.WriteString(writer, cursor.RawClearLine())
 			io.WriteString(writer, "\r")
 			continue
 		}
@@ -58,8 +58,8 @@ func RunBar(reader io.Reader, writer io.Writer, bar *pbar.Marks, reg *regexp.Reg
 		off := len(order) - order[title]
 		io.WriteString(writer, "\r")
 		io.WriteString(writer, cursor.RawMoveUp(uint64(off)))
-		io.WriteString(writer, cursor.RawClearLine())
 		io.WriteString(writer, bars[title].String())
+		io.WriteString(writer, cursor.RawClearLine())
 		io.WriteString(writer, "\r")
 		io.WriteString(writer, cursor.RawMoveDown(uint64(off)))
 	}
