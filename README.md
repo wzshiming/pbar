@@ -7,15 +7,24 @@
 - [English](https://github.com/wzshiming/pbar/blob/master/README.md)
 - [简体中文](https://github.com/wzshiming/pbar/blob/master/README_cn.md)
 
-![demo](https://github.com/wzshiming/pbar/blob/master/demo/demo.gif?raw=ture)
-
 This is a customizable terminal progress bar that also provides several default styles  
 You can achieve a completely different effect by simply modifying the configuration  
 
 ## Usage
 
 [API Documentation](https://godoc.org/github.com/wzshiming/pbar)  
-[Example](https://github.com/wzshiming/pbar/blob/master/test/main.go)  
+
+### Choose a different style
+
+![demo](https://raw.githack.com/wzshiming/pbar/master/demo/example2.svg)
+
+### Multiple progress bars
+
+![demo](https://raw.githack.com/wzshiming/pbar/master/demo/example3.svg)
+
+### Save the original log
+
+![demo](https://raw.githack.com/wzshiming/pbar/master/demo/example4.svg)
 
 ## License
 

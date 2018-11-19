@@ -7,8 +7,6 @@
 - [English](https://github.com/wzshiming/pbar/blob/master/README.md)
 - [简体中文](https://github.com/wzshiming/pbar/blob/master/README_cn.md)
 
-![demo](https://github.com/wzshiming/pbar/blob/master/demo/demo.gif?raw=ture)
-
 这是一款可以定制化的终端进度条, 也提供几种默认的风格  
 只用简单修改一下配置就能实现完全不同的效果  
 
@@ -16,6 +14,18 @@
 
 [API 文档](https://godoc.org/github.com/wzshiming/pbar)  
 [示例](https://github.com/wzshiming/pbar/blob/master/test/main.go)  
+
+### 选择不同风格
+
+![demo](https://raw.githack.com/wzshiming/pbar/master/demo/example2.svg)
+
+### 多条进度条
+
+![demo](https://raw.githack.com/wzshiming/pbar/master/demo/example3.svg)
+
+### 保存原始日志
+
+![demo](https://raw.githack.com/wzshiming/pbar/master/demo/example4.svg)
 
 ## 许可证
 
