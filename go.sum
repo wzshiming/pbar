@@ -1,0 +1,6 @@
+github.com/wzshiming/cursor v0.0.0-20181105095609-4d2ed5f2d472 h1:LkIrdilxuJGYCh9ibMzxYNlYpphUdPdYX9IjiPQ+UCM=
+github.com/wzshiming/cursor v0.0.0-20181105095609-4d2ed5f2d472/go.mod h1:cqGIvb+4GlECk0FayOG3E/O3ySY/1MblNL5Hw2YK7i4=
+github.com/wzshiming/deepclone v0.0.0-20181115082127-d7cd858fb95e h1:GGMz3YSx5t4O0GsPCD6ebq2G1e+Lb2ZPANSbdxuKtEA=
+github.com/wzshiming/deepclone v0.0.0-20181115082127-d7cd858fb95e/go.mod h1:yw0FpJv7zNkB+ZrP9C8aPuyk+WJpr3WS7pTcsLN7e1A=
+github.com/wzshiming/winseq v0.0.0-20181031094240-8a45cfbfe1c2 h1:JHnVrrYXAHarB01FiFduTV4t6QlQZyd5RcOjB5FZswU=
+github.com/wzshiming/winseq v0.0.0-20181031094240-8a45cfbfe1c2/go.mod h1:VTAq37rkGeV+WOybvZwjXiJOicICdpLCN8ifpISjK20=
