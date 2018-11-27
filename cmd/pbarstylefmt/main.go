@@ -17,7 +17,7 @@ var (
 func init() {
 	flag.Usage = func() {
 		w := os.Stdout
-		fmt.Fprintf(w, "stylefmt:\n")
+		fmt.Fprintf(w, "pbarstylefmt:\n")
 		fmt.Fprintf(w, "Usage:\n")
 		fmt.Fprintf(w, "    %s [Options] file1 [filen ...]\n", os.Args[0])
 		fmt.Fprintf(w, "Options:\n")

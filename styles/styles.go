@@ -84,7 +84,7 @@ func normalJson() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "normal.json", size: 1218, mode: os.FileMode(420), modTime: time.Unix(1542275950, 0)}
+	info := bindataFileInfo{name: "normal.json", size: 1218, mode: os.FileMode(420), modTime: time.Unix(1543286423, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -104,7 +104,7 @@ func padJson() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "pad.json", size: 2538, mode: os.FileMode(420), modTime: time.Unix(1542275950, 0)}
+	info := bindataFileInfo{name: "pad.json", size: 2538, mode: os.FileMode(420), modTime: time.Unix(1543286423, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
