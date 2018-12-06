@@ -12,9 +12,21 @@ import (
 
 func RunBar(reader io.Reader, writer io.Writer, bar *pbar.Marks, reg *regexp.Regexp, titleKey string) error {
 	stdin := bufio.NewReader(reader)
-	bars := map[string]*pbar.Marks{}
-	order := map[string]int{}
+	type info struct {
+		bar   *pbar.Marks
+		order int
+	}
+	infos := map[string]*info{}
 	subName := reg.SubexpNames()
+
+	keyIndex := 0
+	for i, name := range subName {
+		if name == titleKey {
+			keyIndex = i
+			break
+		}
+	}
+
 	for {
 		line, _, err := stdin.ReadLine()
 		if err != nil {
@@ -32,33 +44,28 @@ func RunBar(reader io.Reader, writer io.Writer, bar *pbar.Marks, reg *regexp.Reg
 			continue
 		}
 
-		title := ""
-		for i, name := range subName {
-			if name != "" {
-				val := string(subData[i])
-				if name == titleKey {
-					title = val
-				}
-			}
-		}
+		title := string(subData[keyIndex])
 
-		if _, ok := order[title]; !ok {
-			order[title] = len(order)
-			bars[title] = deepclone.Clone(bar).(*pbar.Marks)
+		if _, ok := infos[title]; !ok {
+			infos[title] = &info{
+				order: len(infos),
+				bar:   deepclone.Clone(bar).(*pbar.Marks),
+			}
 			io.WriteString(writer, "\n")
 		}
 
+		info := infos[title]
 		for i, name := range subName {
 			if name != "" {
 				val := string(subData[i])
-				bars[title].Input(name, val)
+				info.bar.Input(name, val)
 			}
 		}
 
-		off := len(order) - order[title]
+		off := len(infos) - info.order
 		io.WriteString(writer, "\r")
 		io.WriteString(writer, cursor.RawMoveUp(uint64(off)))
-		io.WriteString(writer, bars[title].String())
+		io.WriteString(writer, info.bar.String())
 		io.WriteString(writer, cursor.RawClearLine())
 		io.WriteString(writer, "\r")
 		io.WriteString(writer, cursor.RawMoveDown(uint64(off)))
