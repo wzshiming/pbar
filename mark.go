@@ -18,9 +18,10 @@ type MarkPerCent struct {
 
 // MarkPerCent returns mark string
 func (b *MarkPerCent) String() string {
-	n, _ := b.Numer.Float64()
-	d, _ := b.Denom.Float64()
-	return fmt.Sprintf("%3.0f%%", n/d*100)
+	n, _ := b.Numer.Int64()
+	d, _ := b.Denom.Int64()
+
+	return fmt.Sprintf("%3d%%", 100*n/d)
 }
 
 // MarkPer Show progress in a percent
