@@ -1,5 +1,6 @@
 # pbar - Custom terminal progress bar
 
+[![Build Status](https://travis-ci.org/wzshiming/pbar.svg?branch=master)](https://travis-ci.org/wzshiming/pbar)
 [![Go Report Card](https://goreportcard.com/badge/github.com/wzshiming/pbar)](https://goreportcard.com/report/github.com/wzshiming/pbar)
 [![GoDoc](https://godoc.org/github.com/wzshiming/pbar?status.svg)](https://godoc.org/github.com/wzshiming/pbar)
 [![GitHub license](https://img.shields.io/github/license/wzshiming/pbar.svg)](https://github.com/wzshiming/pbar/blob/master/LICENSE)
